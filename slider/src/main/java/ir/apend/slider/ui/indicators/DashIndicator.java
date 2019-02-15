@@ -1,7 +1,7 @@
 package ir.apend.slider.ui.indicators;
 
 import android.content.Context;
-import android.support.v4.content.res.ResourcesCompat;
+import androidx.core.content.res.ResourcesCompat;
 import android.widget.LinearLayout;
 
 import ir.apend.sliderlibrary.R;

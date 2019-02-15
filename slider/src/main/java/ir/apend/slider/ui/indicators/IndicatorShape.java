@@ -12,7 +12,7 @@ import ir.apend.sliderlibrary.R;
  * @author S.Shahini
  * @since 11/26/16
  */
-public abstract class IndicatorShape extends android.support.v7.widget.AppCompatImageView {
+public abstract class IndicatorShape extends androidx.appcompat.widget.AppCompatImageView {
     private boolean isChecked = false;
     private int indicatorSize;
     private boolean mustAnimateChange;
