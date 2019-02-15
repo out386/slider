@@ -101,6 +101,7 @@ public class SliderAdapter extends PagerAdapter {
         if (!TextUtils.isEmpty(url)) {
             Glide.with(imageView.getContext()) // Bind it with the context of the actual view used
                     .load(url) // Load the image
+                    .placeholder(R.mipmap.ic_image)
                     .bitmapTransform(new CenterCrop(imageView.getContext()), new RoundedCornersTransformations(imageView.getContext(), corner, 0, RoundedCornersTransformations.CornerType.ALL))
                     .animate(R.anim.fade_in) // need to manually set the animation as bitmap cannot use cross fade
                     .into(imageView);
