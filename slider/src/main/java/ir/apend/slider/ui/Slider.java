@@ -101,17 +101,9 @@ public class Slider extends FrameLayout implements ViewPager.OnPageChangeListene
         if (slideList == null || slideList.size() == 0)
             return;
 
-        viewPager = new LooperWrapViewPager(getContext());
+        if (viewPager == null)
+            setupViewPager();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            viewPager.setId(View.generateViewId());
-        } else {
-            int id = Math.abs(new Random().nextInt((5000 - 1000) + 1) + 1000);
-            viewPager.setId(id);
-        }
-        viewPager.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        viewPager.addOnPageChangeListener(Slider.this);
-        addView(viewPager);
         SliderAdapter adapter = new SliderAdapter(getContext(), slideList, new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -130,6 +122,16 @@ public class Slider extends FrameLayout implements ViewPager.OnPageChangeListene
         }
         if (slideCount > 1)
             setupTimer();
+    }
+
+    private void setupViewPager() {
+        viewPager = new LooperWrapViewPager(getContext());
+
+        int id = Math.abs(new Random().nextInt((5000 - 1000) + 1) + 1000);
+        viewPager.setId(id);
+        viewPager.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        viewPager.addOnPageChangeListener(Slider.this);
+        addView(viewPager);
     }
 
     @Override
