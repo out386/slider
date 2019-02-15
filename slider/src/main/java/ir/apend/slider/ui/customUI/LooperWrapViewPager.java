@@ -122,6 +122,8 @@ public class LooperWrapViewPager extends ViewPager {
 
     public LooperWrapViewPager(Context context) {
         super(context);
+        setPageMargin(-60);
+        setPadding(0, 0, 0, 0);
         init();
     }
 

@@ -46,6 +46,7 @@ public class Slider extends FrameLayout implements ViewPager.OnPageChangeListene
     private boolean mustLoopSlides;
     private SlideIndicatorsGroup slideIndicatorsGroup;
     private int slideShowInterval = 5000;
+    private int screenWidth = -1;
 
     private Handler handler = new Handler();
     private int slideCount;
@@ -64,6 +65,10 @@ public class Slider extends FrameLayout implements ViewPager.OnPageChangeListene
     public Slider(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         parseCustomAttributes(attrs);
+    }
+
+    public void setScreenWidth(int screenWidth) {
+        this.screenWidth = screenWidth;
     }
 
     private void parseCustomAttributes(AttributeSet attributeSet) {
@@ -113,7 +118,7 @@ public class Slider extends FrameLayout implements ViewPager.OnPageChangeListene
                 if (itemClickListener != null)
                     itemClickListener.onItemClick(adapterView, view, i, l);
             }
-        });
+        }, screenWidth);
         viewPager.setAdapter(adapter);
         slideCount = slideList.size();
         viewPager.setCurrentItem(slideCount - 1);

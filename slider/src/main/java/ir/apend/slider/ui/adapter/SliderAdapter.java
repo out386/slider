@@ -29,11 +29,13 @@ import ir.apend.sliderlibrary.R;
 
 public class SliderAdapter extends PagerAdapter {
 
+    private int screenWidth;
     private LayoutInflater layoutInflater;
     private AdapterView.OnItemClickListener itemClickListener;
     private List<Slide> items = new ArrayList<>();
 
-    public SliderAdapter(@NonNull Context context, List<Slide> items, AdapterView.OnItemClickListener itemClickListener) {
+    public SliderAdapter(@NonNull Context context, List<Slide> items, AdapterView.OnItemClickListener itemClickListener, int screenWidth) {
+        this.screenWidth = screenWidth;
         this.items = items;
         this.itemClickListener = itemClickListener;
         layoutInflater = LayoutInflater.from(context);
@@ -56,6 +58,7 @@ public class SliderAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, final int position) {
         View view = layoutInflater.inflate(R.layout.row_slider, container, false);
         ImageView sliderImage = (ImageView) view.findViewById(R.id.sliderImage);
+        setImageWidth(view.findViewById(R.id.topChild));
         loadImage(sliderImage, items.get(position).getImageUrl(), items.get(position).getImageCorner());
         View parent = view.findViewById(R.id.ripple);
         parent.setOnClickListener(new View.OnClickListener() {
@@ -67,6 +70,14 @@ public class SliderAdapter extends PagerAdapter {
         });
         container.addView(view);
         return view;
+    }
+
+    private void setImageWidth(View view) {
+        if (screenWidth > -1) {
+            ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+            layoutParams.width = screenWidth - 80;
+            view.setLayoutParams(layoutParams);
+        }
     }
 
     @Override
