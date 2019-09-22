@@ -22,6 +22,7 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import android.util.AttributeSet;
 
+import ir.apend.slider.DimenUtils;
 import ir.apend.slider.ui.adapter.LoopPagerAdapterWrapper;
 
 
@@ -118,11 +119,9 @@ public class LooperWrapViewPager extends ViewPager {
         mOuterPageChangeListener = listener;
     }
 
-    ;
-
     public LooperWrapViewPager(Context context) {
         super(context);
-        setPageMargin(-60);
+        setPageMargin(DimenUtils.dpToPx(context, -60));
         setPadding(0, 0, 0, 0);
         init();
     }

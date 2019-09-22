@@ -17,6 +17,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import java.util.ArrayList;
 import java.util.List;
 
+import ir.apend.slider.DimenUtils;
 import ir.apend.slider.model.Slide;
 import ir.apend.slider.ui.Slider;
 import ir.apend.slider.ui.customUI.RoundedCornersTransformations;
@@ -29,13 +30,16 @@ import ir.apend.sliderlibrary.R;
 
 public class SliderAdapter extends PagerAdapter {
 
-    private int screenWidth;
+    private Context context;
+    private float screenWidth;
     private LayoutInflater layoutInflater;
     private AdapterView.OnItemClickListener itemClickListener;
-    private List<Slide> items = new ArrayList<>();
+    private List<Slide> items;
 
-    public SliderAdapter(@NonNull Context context, List<Slide> items, AdapterView.OnItemClickListener itemClickListener, int screenWidth) {
-        this.screenWidth = screenWidth;
+    public SliderAdapter(@NonNull Context context, List<Slide> items,
+                         AdapterView.OnItemClickListener itemClickListener, int screenWidth) {
+        this.context = context;
+        this.screenWidth = DimenUtils.pxToDp(context, screenWidth);
         this.items = items;
         this.itemClickListener = itemClickListener;
         layoutInflater = LayoutInflater.from(context);
@@ -57,7 +61,7 @@ public class SliderAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
         View view = layoutInflater.inflate(R.layout.row_slider, container, false);
-        ImageView sliderImage = (ImageView) view.findViewById(R.id.sliderImage);
+        ImageView sliderImage = view.findViewById(R.id.sliderImage);
         setImageWidth(view.findViewById(R.id.topChild));
         loadImage(sliderImage, items.get(position).getImageUrl(), items.get(position).getImageCorner());
         View parent = view.findViewById(R.id.ripple);
@@ -75,7 +79,7 @@ public class SliderAdapter extends PagerAdapter {
     private void setImageWidth(View view) {
         if (screenWidth > -1) {
             ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-            layoutParams.width = screenWidth - 80;
+            layoutParams.width = DimenUtils.dpToPx(context, screenWidth - 80);
             view.setLayoutParams(layoutParams);
         }
     }
