@@ -1,8 +1,6 @@
 package ir.apend.slider.ui.adapter;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.viewpager.widget.PagerAdapter;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,10 +9,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.PagerAdapter;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ir.apend.slider.DimenUtils;
@@ -24,22 +24,22 @@ import ir.apend.slider.ui.customUI.RoundedCornersTransformations;
 import ir.apend.sliderlibrary.R;
 
 /**
- * Created by Farzad Farazmand on 28,June,2017
- * farzad.farazmand@gmail.com
+ * Created by Farzad Farazmand on 28,June,2017 farzad.farazmand@gmail.com
  */
 
 public class SliderAdapter extends PagerAdapter {
 
     private Context context;
-    private float screenWidth;
+    private int targetWidth;
     private LayoutInflater layoutInflater;
     private AdapterView.OnItemClickListener itemClickListener;
     private List<Slide> items;
 
     public SliderAdapter(@NonNull Context context, List<Slide> items,
-                         AdapterView.OnItemClickListener itemClickListener, int screenWidth) {
+                         AdapterView.OnItemClickListener itemClickListener,
+                         int targetWidth) {
         this.context = context;
-        this.screenWidth = DimenUtils.pxToDp(context, screenWidth);
+        this.targetWidth = targetWidth;
         this.items = items;
         this.itemClickListener = itemClickListener;
         layoutInflater = LayoutInflater.from(context);
@@ -77,9 +77,9 @@ public class SliderAdapter extends PagerAdapter {
     }
 
     private void setImageWidth(View view) {
-        if (screenWidth > -1) {
+        if (targetWidth > -1) {
             ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-            layoutParams.width = DimenUtils.dpToPx(context, screenWidth - 80);
+            layoutParams.width = targetWidth;
             view.setLayoutParams(layoutParams);
         }
     }
@@ -101,7 +101,7 @@ public class SliderAdapter extends PagerAdapter {
     /**
      * Display the gallery image into the image view provided.
      */
-    private void loadImage(ImageView imageView, String url,int corner) {
+    private void loadImage(ImageView imageView, String url, int corner) {
         if (!TextUtils.isEmpty(url)) {
             Glide.with(imageView.getContext()) // Bind it with the context of the actual view used
                     .load(url) // Load the image

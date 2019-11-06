@@ -17,10 +17,10 @@
 package ir.apend.slider.ui.customUI;
 
 import android.content.Context;
+import android.util.AttributeSet;
 
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-import android.util.AttributeSet;
 
 import ir.apend.slider.DimenUtils;
 import ir.apend.slider.ui.adapter.LoopPagerAdapterWrapper;
@@ -29,21 +29,17 @@ import ir.apend.slider.ui.adapter.LoopPagerAdapterWrapper;
 /**
  * A ViewPager subclass enabling infinte scrolling of the viewPager elements
  * <p>
- * When used for paginating views (in opposite to fragments), no code changes
- * should be needed only change xml's from <android.support.v4.rootView.ViewPager>
- * to <com.imbryk.viewPager.LoopViewPager>
+ * When used for paginating views (in opposite to fragments), no code changes should be needed only
+ * change xml's from <android.support.v4.rootView.ViewPager> to <com.imbryk.viewPager.LoopViewPager>
  * <p>
  * If "blinking" can be seen when paginating to first or last rootView, simply call
  * seBoundaryCaching( true ), or change DEFAULT_BOUNDARY_CASHING to true
  * <p>
- * When using a FragmentPagerAdapter or FragmentStatePagerAdapter,
- * additional changes in the adapter must be done.
- * The adapter must be prepared to create 2 extra items e.g.:
+ * When using a FragmentPagerAdapter or FragmentStatePagerAdapter, additional changes in the adapter
+ * must be done. The adapter must be prepared to create 2 extra items e.g.:
  * <p>
- * The original adapter creates 4 items: [0,1,2,3]
- * The modified adapter will have to create 6 items [0,1,2,3,4,5]
- * with mapping realPosition=(position-1)%count
- * [0->3, 1->0, 2->1, 3->2, 4->3, 5->0]
+ * The original adapter creates 4 items: [0,1,2,3] The modified adapter will have to create 6 items
+ * [0,1,2,3,4,5] with mapping realPosition=(position-1)%count [0->3, 1->0, 2->1, 3->2, 4->3, 5->0]
  */
 public class LooperWrapViewPager extends ViewPager {
 
@@ -58,7 +54,7 @@ public class LooperWrapViewPager extends ViewPager {
      *
      * @param position
      * @param count
-     * @return (position-1)%count
+     * @return (position - 1)%count
      */
     public static int toRealPosition(int position, int count) {
         position = position - 1;
@@ -71,8 +67,8 @@ public class LooperWrapViewPager extends ViewPager {
     }
 
     /**
-     * If set to true, the boundary views (i.e. first and last) will never be destroyed
-     * This may help to prevent "blinking" of some views
+     * If set to true, the boundary views (i.e. first and last) will never be destroyed This may
+     * help to prevent "blinking" of some views
      *
      * @param flag
      */
@@ -119,9 +115,12 @@ public class LooperWrapViewPager extends ViewPager {
         mOuterPageChangeListener = listener;
     }
 
-    public LooperWrapViewPager(Context context) {
+    public LooperWrapViewPager(Context context, int targetWidth) {
         super(context);
-        setPageMargin(DimenUtils.dpToPx(context, -60));
+        int screenWidth = DimenUtils.getWindowWidth(context);
+        int gap = DimenUtils.dpToPx(context, 20);
+        int margin = screenWidth - targetWidth - gap;
+        setPageMargin(-margin);
         setPadding(0, 0, 0, 0);
         init();
     }

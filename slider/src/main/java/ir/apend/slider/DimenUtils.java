@@ -21,12 +21,28 @@ package ir.apend.slider;
  */
 
 import android.content.Context;
+import android.graphics.Point;
+import android.view.Display;
+import android.view.WindowManager;
 
 public class DimenUtils {
     public static float pxToDp(Context context, float px) {
         return px / context.getResources().getDisplayMetrics().density;
     }
+
     public static int dpToPx(Context context, float dp) {
         return (int) (dp * context.getResources().getDisplayMetrics().density);
+    }
+
+    public static int getWindowWidth(Context context) {
+        WindowManager windowManager =
+                (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display;
+        if (windowManager != null && (display = windowManager.getDefaultDisplay()) != null) {
+            Point size = new Point();
+            display.getSize(size);
+            return size.x;
+        }
+        return 0;
     }
 }

@@ -3,17 +3,17 @@ package ir.apend.slider.ui;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Handler;
-import androidx.annotation.AttrRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.viewpager.widget.ViewPager;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
+
+import androidx.annotation.AttrRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.viewpager.widget.ViewPager;
 
 import java.util.List;
 import java.util.Random;
@@ -26,8 +26,7 @@ import ir.apend.slider.ui.indicators.SlideIndicatorsGroup;
 import ir.apend.sliderlibrary.R;
 
 /**
- * Created by Farzad Farazmand on 28,June,2017
- * farzad.farazmand@gmail.com
+ * Created by Farzad Farazmand on 28,June,2017 farzad.farazmand@gmail.com
  */
 
 public class Slider extends FrameLayout implements ViewPager.OnPageChangeListener {
@@ -46,7 +45,7 @@ public class Slider extends FrameLayout implements ViewPager.OnPageChangeListene
     private boolean mustLoopSlides;
     private SlideIndicatorsGroup slideIndicatorsGroup;
     private int slideShowInterval = 5000;
-    private int screenWidth = -1;
+    private int targetWidth = -1;
 
     private Handler handler = new Handler();
     private int slideCount;
@@ -67,8 +66,8 @@ public class Slider extends FrameLayout implements ViewPager.OnPageChangeListene
         parseCustomAttributes(attrs);
     }
 
-    public void setScreenWidth(int screenWidth) {
-        this.screenWidth = screenWidth;
+    public void setTargetWidth(int targetWidth) {
+        this.targetWidth = targetWidth;
     }
 
     private void parseCustomAttributes(AttributeSet attributeSet) {
@@ -104,28 +103,29 @@ public class Slider extends FrameLayout implements ViewPager.OnPageChangeListene
         if (viewPager == null)
             setupViewPager();
 
+        slideCount = slideList.size();
         SliderAdapter adapter = new SliderAdapter(getContext(), slideList, new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if (itemClickListener != null)
                     itemClickListener.onItemClick(adapterView, view, i, l);
             }
-        }, screenWidth);
+        }, targetWidth);
         viewPager.setAdapter(adapter);
-        slideCount = slideList.size();
-        viewPager.setCurrentItem(slideCount - 1);
+        viewPager.setOffscreenPageLimit(slideCount);
+        viewPager.setCurrentItem(0);
         if (!hideIndicators && slideCount > 1) {
             slideIndicatorsGroup = new SlideIndicatorsGroup(getContext(), selectedSlideIndicator, unSelectedSlideIndicator, defaultIndicator, indicatorSize, mustAnimateIndicators);
             addView(slideIndicatorsGroup);
             slideIndicatorsGroup.setSlides(slideCount);
-            slideIndicatorsGroup.onSlideChange(slideCount - 1);
+            slideIndicatorsGroup.onSlideChange(0);
         }
         if (slideCount > 1)
             setupTimer();
     }
 
     private void setupViewPager() {
-        viewPager = new LooperWrapViewPager(getContext());
+        viewPager = new LooperWrapViewPager(getContext(), targetWidth);
 
         int id = Math.abs(new Random().nextInt((5000 - 1000) + 1) + 1000);
         viewPager.setId(id);
