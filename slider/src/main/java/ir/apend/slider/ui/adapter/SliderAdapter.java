@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 
 import java.util.List;
@@ -105,6 +106,7 @@ public class SliderAdapter extends PagerAdapter {
         if (!TextUtils.isEmpty(url)) {
             Glide.with(imageView.getContext()) // Bind it with the context of the actual view used
                     .load(url) // Load the image
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .placeholder(R.mipmap.ic_image)
                     .bitmapTransform(new CenterCrop(imageView.getContext()), new RoundedCornersTransformations(imageView.getContext(), corner, 0, RoundedCornersTransformations.CornerType.ALL))
                     .animate(R.anim.fade_in) // need to manually set the animation as bitmap cannot use cross fade
