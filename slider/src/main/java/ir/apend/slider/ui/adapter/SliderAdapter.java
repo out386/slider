@@ -1,6 +1,7 @@
 package ir.apend.slider.ui.adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -64,7 +65,7 @@ public class SliderAdapter extends PagerAdapter {
         View view = layoutInflater.inflate(R.layout.row_slider, container, false);
         ImageView sliderImage = view.findViewById(R.id.sliderImage);
         setImageWidth(view.findViewById(R.id.topChild));
-        loadImage(sliderImage, items.get(position).getImageUrl(), items.get(position).getImageCorner());
+        loadImage(sliderImage, items.get(position).getImageUri(), items.get(position).getImageCorner());
         View parent = view.findViewById(R.id.ripple);
         parent.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,13 +103,13 @@ public class SliderAdapter extends PagerAdapter {
     /**
      * Display the gallery image into the image view provided.
      */
-    private void loadImage(ImageView imageView, String url, int corner) {
-        if (!TextUtils.isEmpty(url)) {
+    private void loadImage(ImageView imageView, Uri uri, int corner) {
+        if (uri != null) {
             Glide.with(imageView.getContext()) // Bind it with the context of the actual view used
-                    .load(url) // Load the image
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .load(uri) // Load the image
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .placeholder(R.mipmap.ic_image)
-                    .bitmapTransform(new CenterCrop(imageView.getContext()), new RoundedCornersTransformations(imageView.getContext(), corner, 0, RoundedCornersTransformations.CornerType.ALL))
+                    .bitmapTransform(new CenterCrop(imageView.getContext()))
                     .animate(R.anim.fade_in) // need to manually set the animation as bitmap cannot use cross fade
                     .into(imageView);
         }

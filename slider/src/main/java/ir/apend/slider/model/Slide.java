@@ -1,6 +1,8 @@
 package ir.apend.slider.model;
 
 
+import android.net.Uri;
+
 import java.io.Serializable;
 
 /**
@@ -11,12 +13,12 @@ import java.io.Serializable;
 public class Slide implements Serializable{
 
     private int id;
-    private String imageUrl;
+    private Uri imageUri;
     private int imageCorner;
 
-    public Slide(int id, String imageUrl,int imageCorner) {
+    public Slide(int id, Uri imageUri,int imageCorner) {
         this.id = id;
-        this.imageUrl = imageUrl;
+        this.imageUri = imageUri;
         this.imageCorner = imageCorner;
     }
 
@@ -24,16 +26,16 @@ public class Slide implements Serializable{
         return id;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public Uri getImageUri() {
+        return imageUri;
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImageUri(Uri imageUri) {
+        this.imageUri = imageUri;
     }
 
     public int getImageCorner() {
