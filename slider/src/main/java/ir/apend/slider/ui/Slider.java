@@ -194,6 +194,9 @@ public class Slider extends FrameLayout implements ViewPager.OnPageChangeListene
         }
     }
 
+    public void onDestroy() {
+        handler.removeCallbacksAndMessages(null);
+    }
 
     // setters
     public void setItemClickListener(AdapterView.OnItemClickListener itemClickListener) {
