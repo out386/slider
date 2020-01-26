@@ -196,6 +196,13 @@ public class Slider extends FrameLayout implements ViewPager.OnPageChangeListene
 
     public void onDestroy() {
         handler.removeCallbacksAndMessages(null);
+        // Apparently, this is needed for the last message to get recycled.
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
     }
 
     // setters
