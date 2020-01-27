@@ -51,6 +51,7 @@ public class Slider extends FrameLayout implements ViewPager.OnPageChangeListene
     private int slideCount;
     private int currentPageNumber;
     private boolean hideIndicators = false;
+    private Runnable timerRunnable;
 
     public Slider(@NonNull Context context) {
         super(context);
@@ -129,6 +130,7 @@ public class Slider extends FrameLayout implements ViewPager.OnPageChangeListene
 
         int id = Math.abs(new Random().nextInt((5000 - 1000) + 1) + 1000);
         viewPager.setId(id);
+        viewPager.setSaveFromParentEnabled(false);
         viewPager.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         viewPager.addOnPageChangeListener(Slider.this);
         addView(viewPager);
@@ -168,26 +170,9 @@ public class Slider extends FrameLayout implements ViewPager.OnPageChangeListene
     private void setupTimer() {
         try {
             if (mustLoopSlides) {
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            if (currentPageNumber < slideCount)
-                                currentPageNumber += 1;
-                            else
-                                currentPageNumber = 1;
-
-                            viewPager.setCurrentItem(currentPageNumber - 1, true);
-
-                            handler.removeCallbacksAndMessages(null);
-                            handler.postDelayed(this, slideShowInterval);
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                }, slideShowInterval);
+                if (timerRunnable == null)
+                    timerRunnable = new TimerRunnable();
+                handler.postDelayed(timerRunnable, slideShowInterval);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -196,6 +181,7 @@ public class Slider extends FrameLayout implements ViewPager.OnPageChangeListene
 
     public void onDestroy() {
         handler.removeCallbacksAndMessages(null);
+        timerRunnable = null;
         // Apparently, this is needed for the last message to get recycled.
         handler.post(new Runnable() {
             @Override
@@ -203,6 +189,14 @@ public class Slider extends FrameLayout implements ViewPager.OnPageChangeListene
 
             }
         });
+        handler.removeCallbacksAndMessages(null);
+        handler = null;
+        removeAllViews();
+        //viewPager.setAdapter(null);
+        viewPager = null;
+        slideIndicatorsGroup = null;
+        itemClickListener = null;
+        selectedSlideIndicator = unSelectedSlideIndicator = null;
     }
 
     // setters
@@ -219,6 +213,26 @@ public class Slider extends FrameLayout implements ViewPager.OnPageChangeListene
                 slideIndicatorsGroup.setVisibility(VISIBLE);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private class TimerRunnable implements Runnable {
+        @Override
+        public void run() {
+            try {
+                if (currentPageNumber < slideCount)
+                    currentPageNumber += 1;
+                else
+                    currentPageNumber = 1;
+
+                viewPager.setCurrentItem(currentPageNumber - 1, true);
+
+                handler.removeCallbacksAndMessages(null);
+                handler.postDelayed(this, slideShowInterval);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
