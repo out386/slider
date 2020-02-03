@@ -116,6 +116,8 @@ public class Slider extends FrameLayout implements ViewPager.OnPageChangeListene
         viewPager.setOffscreenPageLimit(slideCount);
         viewPager.setCurrentItem(0);
         if (!hideIndicators && slideCount > 1) {
+            if (slideIndicatorsGroup != null)
+                removeView(slideIndicatorsGroup);
             slideIndicatorsGroup = new SlideIndicatorsGroup(getContext(), selectedSlideIndicator, unSelectedSlideIndicator, defaultIndicator, indicatorSize, mustAnimateIndicators);
             addView(slideIndicatorsGroup);
             slideIndicatorsGroup.setSlides(slideCount);
