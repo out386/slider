@@ -14,12 +14,10 @@ public class Slide implements Serializable{
 
     private int id;
     private Uri imageUri;
-    private int imageCorner;
 
-    public Slide(int id, Uri imageUri,int imageCorner) {
+    public Slide(int id, Uri imageUri) {
         this.id = id;
         this.imageUri = imageUri;
-        this.imageCorner = imageCorner;
     }
 
     public int getId() {
@@ -38,11 +36,4 @@ public class Slide implements Serializable{
         this.imageUri = imageUri;
     }
 
-    public int getImageCorner() {
-        return imageCorner;
-    }
-
-    public void setImageCorner(int imageCorner) {
-        this.imageCorner = imageCorner;
-    }
 }

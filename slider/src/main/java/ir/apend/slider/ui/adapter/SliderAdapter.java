@@ -2,7 +2,6 @@ package ir.apend.slider.ui.adapter;
 
 import android.content.Context;
 import android.net.Uri;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,10 +18,8 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 
 import java.util.List;
 
-import ir.apend.slider.DimenUtils;
 import ir.apend.slider.model.Slide;
 import ir.apend.slider.ui.Slider;
-import ir.apend.slider.ui.customUI.RoundedCornersTransformations;
 import ir.apend.sliderlibrary.R;
 
 /**
@@ -31,7 +28,6 @@ import ir.apend.sliderlibrary.R;
 
 public class SliderAdapter extends PagerAdapter {
 
-    private Context context;
     private int targetWidth;
     private LayoutInflater layoutInflater;
     private AdapterView.OnItemClickListener itemClickListener;
@@ -40,7 +36,6 @@ public class SliderAdapter extends PagerAdapter {
     public SliderAdapter(@NonNull Context context, List<Slide> items,
                          AdapterView.OnItemClickListener itemClickListener,
                          int targetWidth) {
-        this.context = context;
         this.targetWidth = targetWidth;
         this.items = items;
         this.itemClickListener = itemClickListener;
@@ -65,7 +60,7 @@ public class SliderAdapter extends PagerAdapter {
         View view = layoutInflater.inflate(R.layout.row_slider, container, false);
         ImageView sliderImage = view.findViewById(R.id.sliderImage);
         setImageWidth(view.findViewById(R.id.topChild));
-        loadImage(sliderImage, items.get(position).getImageUri(), items.get(position).getImageCorner());
+        loadImage(sliderImage, items.get(position).getImageUri());
         View parent = view.findViewById(R.id.ripple);
         parent.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,14 +98,13 @@ public class SliderAdapter extends PagerAdapter {
     /**
      * Display the gallery image into the image view provided.
      */
-    private void loadImage(ImageView imageView, Uri uri, int corner) {
+    private void loadImage(ImageView imageView, Uri uri) {
         if (uri != null) {
             Glide.with(imageView.getContext()) // Bind it with the context of the actual view used
                     .load(uri) // Load the image
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .diskCacheStrategy(DiskCacheStrategy.DATA)
                     .placeholder(R.mipmap.ic_image)
-                    .bitmapTransform(new CenterCrop(imageView.getContext()))
-                    .animate(R.anim.fade_in) // need to manually set the animation as bitmap cannot use cross fade
+                    .transform(new CenterCrop())
                     .into(imageView);
         }
     }
